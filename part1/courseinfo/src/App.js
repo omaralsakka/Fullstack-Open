@@ -32,9 +32,12 @@ const Content = (props) => {
 };
 
 const Total = (props) => {
+  const arr = props.total;
+  let total = 0;
+  arr.map((elem) => (total += elem.exercises));
   return (
     <>
-      <p>Number of exercises {props.total}</p>
+      <p>Number of exercises {total}</p>
     </>
   );
 };
@@ -59,9 +62,7 @@ const App = () => {
     <div>
       <Header course={course} />
       <Content parts={parts} />
-      <Total
-        total={parts[0].exercises + parts[1].exercises + parts[2].exercises}
-      />
+      <Total total={parts} />
     </div>
   );
 };
