@@ -8,12 +8,35 @@ const Button = (props) => {
   );
 };
 
-const Statistics = (props) => {
+const StatisticLine = (props) => {
   return (
     <>
       <p>
         {props.text} {props.value}
       </p>
+    </>
+  );
+};
+
+const Statistics = ({ good, neutral, bad, totalSum }) => {
+  if (totalSum !== 0) {
+    return (
+      <>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={totalSum} />
+        <StatisticLine text="average" value={CalcAvg(good, bad, totalSum)} />
+        <StatisticLine
+          text="positive"
+          value={CalcPositive(totalSum, good) + " %"}
+        />
+      </>
+    );
+  }
+  return (
+    <>
+      <p>No feedback given</p>
     </>
   );
 };
@@ -42,12 +65,7 @@ const App = () => {
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
 
       <h1>statistics</h1>
-      <Statistics text="good" value={good} />
-      <Statistics text="neutral" value={neutral} />
-      <Statistics text="bad" value={bad} />
-      <Statistics text="all" value={totalSum} />
-      <Statistics text="average" value={CalcAvg(good, bad, totalSum)} />
-      <Statistics text="positive" value={CalcPositive(totalSum, good) + " %"} />
+      <Statistics good={good} neutral={neutral} bad={bad} totalSum={totalSum} />
     </div>
   );
 };
