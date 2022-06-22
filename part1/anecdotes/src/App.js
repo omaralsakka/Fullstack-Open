@@ -1,11 +1,24 @@
 import { useState } from "react";
 
-const Button = ({ handleClick }) => {
+const Button = ({ handleClick, value }) => {
   return (
     <>
-      <button onClick={handleClick}>next anecdotes</button>
+      <button onClick={handleClick}>{value}</button>
     </>
   );
+};
+
+const Votes = ({ votes }) => <>has {votes} votes</>;
+
+const updateArr = (array, index) => {
+  let temp_arr = [...array];
+  let temp_element = temp_arr[index];
+
+  temp_element += 1;
+
+  temp_arr[index] = temp_element;
+
+  return temp_arr;
 };
 
 const App = () => {
@@ -20,12 +33,24 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [votesarray, setArray] = useState(Array(7).fill(0));
 
   return (
     <div>
       {anecdotes[selected]}
       <br></br>
-      <Button handleClick={() => setSelected(Math.floor(Math.random() * 7))} />
+
+      <Votes votes={votesarray[selected]} />
+      <br></br>
+
+      <Button
+        handleClick={() => setArray(updateArr(votesarray, selected))}
+        value="vote"
+      />
+      <Button
+        handleClick={() => setSelected(Math.floor(Math.random() * 7))}
+        value="anecdotes"
+      />
     </div>
   );
 };
