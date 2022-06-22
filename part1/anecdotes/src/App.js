@@ -21,6 +21,19 @@ const updateArr = (array, index) => {
   return temp_arr;
 };
 
+const Max = ({ value, array, idx, anc }) => {
+  if (value !== 0) {
+    return (
+      <>
+        <h1>Anecdotes with most votes</h1>
+        {anc[idx]}
+        <br></br>
+        <Votes votes={array[idx]} />
+      </>
+    );
+  }
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -34,9 +47,11 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [votesarray, setArray] = useState(Array(7).fill(0));
-
+  const mostVotes = Math.max(...votesarray);
+  const mostIdx = votesarray.indexOf(mostVotes);
   return (
     <div>
+      <h1>Anecdotes of the day</h1>
       {anecdotes[selected]}
       <br></br>
 
@@ -51,6 +66,8 @@ const App = () => {
         handleClick={() => setSelected(Math.floor(Math.random() * 7))}
         value="anecdotes"
       />
+      <br></br>
+      <Max value={mostVotes} array={votesarray} idx={mostIdx} anc={anecdotes} />
     </div>
   );
 };
