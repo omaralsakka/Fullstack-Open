@@ -10,34 +10,35 @@ const Button = (props) => {
 
 const StatisticLine = (props) => {
   return (
-    <>
-      <p>
-        {props.text} {props.value}
-      </p>
-    </>
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.value}</td>
+    </tr>
   );
 };
 
 const Statistics = ({ good, neutral, bad, totalSum }) => {
   if (totalSum !== 0) {
     return (
-      <>
-        <StatisticLine text="good" value={good} />
-        <StatisticLine text="neutral" value={neutral} />
-        <StatisticLine text="bad" value={bad} />
-        <StatisticLine text="all" value={totalSum} />
-        <StatisticLine text="average" value={CalcAvg(good, bad, totalSum)} />
-        <StatisticLine
-          text="positive"
-          value={CalcPositive(totalSum, good) + " %"}
-        />
-      </>
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
+          <StatisticLine text="all" value={totalSum} />
+          <StatisticLine text="average" value={CalcAvg(good, bad, totalSum)} />
+          <StatisticLine
+            text="positive"
+            value={CalcPositive(totalSum, good) + " %"}
+          />
+        </tbody>
+      </table>
     );
   }
   return (
-    <>
+    <div>
       <p>No feedback given</p>
-    </>
+    </div>
   );
 };
 
