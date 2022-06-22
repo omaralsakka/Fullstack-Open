@@ -8,27 +8,31 @@ const Button = (props) => {
   );
 };
 
-const Display = (props) => (
-  <>
-    <p>
-      {props.text} {props.value}
-    </p>
-  </>
-);
+const Statistics = (props) => {
+  return (
+    <>
+      <p>
+        {props.text} {props.value}
+      </p>
+    </>
+  );
+};
+
+const CalcPositive = (total, good) => {
+  if (total !== 0) return (good / total) * 100;
+  return 0;
+};
+
+const CalcAvg = (good, bad, total) => {
+  if (total !== 0) return (good - bad) / total;
+  return 0;
+};
 
 const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
   const totalSum = good + bad + neutral;
-  const CalcAverage = (props) => {
-    if (props[2] === 0) return 0;
-    else return (props[0] - props[1]) / props[2];
-  };
-  const CalcPositive = (props) => {
-    if (props[1] === 0) return 0;
-    else return (props[0] / props[1]) * 100;
-  };
 
   return (
     <div>
@@ -38,13 +42,12 @@ const App = () => {
       <Button handleClick={() => setBad(bad + 1)} text="bad" />
 
       <h1>statistics</h1>
-      <Display text="good" value={good} />
-      <Display text="neutral" value={neutral} />
-      <Display text="bad" value={bad} />
-      <Display text="all" value={totalSum} />
-
-      <Display text="average" value={CalcAverage([good, bad, totalSum])} />
-      <Display text="positive" value={CalcPositive([good, totalSum]) + " %"} />
+      <Statistics text="good" value={good} />
+      <Statistics text="neutral" value={neutral} />
+      <Statistics text="bad" value={bad} />
+      <Statistics text="all" value={totalSum} />
+      <Statistics text="average" value={CalcAvg(good, bad, totalSum)} />
+      <Statistics text="positive" value={CalcPositive(totalSum, good) + " %"} />
     </div>
   );
 };
