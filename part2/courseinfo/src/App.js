@@ -1,27 +1,18 @@
-const Header = ({ name }) => {
-  return (
-    <>
-      <h1>{name}</h1>
-    </>
-  );
-};
+const Header = ({ name }) => <h1>{name}</h1>;
 
-const Part = (props) => {
-  return (
-    <>
-      <p>
-        {props.title} {props.exercises}
-      </p>
-    </>
-  );
-};
+const Part = ({ title, exercises }) => (
+  <p>
+    {title} {exercises}
+  </p>
+);
 
 const Total = ({ total }) => {
-  let sum = 0;
-  total.map((elem) => (sum += elem.exercises));
+  const sum = total.reduce((sum, idx) => {
+    return sum + idx.exercises;
+  }, 0);
   return (
     <>
-      <h5>total of {sum} exercises</h5>
+      <h4>total of {sum} exercises</h4>
     </>
   );
 };
