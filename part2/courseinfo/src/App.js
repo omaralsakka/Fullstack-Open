@@ -16,9 +16,17 @@ const Part = (props) => {
   );
 };
 
-const Content = ({ parts }) => {
-  // const parts = parts.parts;
+const Total = ({ total }) => {
+  let sum = 0;
+  total.map((elem) => (sum += elem.exercises));
+  return (
+    <>
+      <h5>total of {sum} exercises</h5>
+    </>
+  );
+};
 
+const Content = ({ parts }) => {
   return (
     <>
       {parts.map((elem) => {
@@ -28,20 +36,10 @@ const Content = ({ parts }) => {
           </div>
         );
       })}
+      <Total total={parts} />
     </>
   );
 };
-
-// const Total = (props) => {
-//   const arr = props.total.parts;
-//   let total = 0;
-//   arr.map((elem) => (total += elem.exercises));
-//   return (
-//     <>
-//       <p>Number of exercises {total}</p>
-//     </>
-//   );
-// };
 
 const Course = ({ course }) => {
   return (
@@ -71,6 +69,11 @@ const App = () => {
         name: "State of a component",
         exercises: 14,
         id: 3,
+      },
+      {
+        name: "Redux",
+        exercises: 11,
+        id: 4,
       },
     ],
   };
