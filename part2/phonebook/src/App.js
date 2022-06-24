@@ -19,12 +19,16 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    const newObj = {
-      name: newName,
-      id: Math.random(1, 9999),
-    };
-    setPersons(persons.concat(newObj));
-    setNewName("");
+    const nameCheck = persons.filter((person) => person.name === newName);
+
+    if (!nameCheck.length) {
+      const newObj = {
+        name: newName,
+        id: Math.random(1, 9999),
+      };
+      setPersons(persons.concat(newObj));
+      setNewName("");
+    } else alert(`${newName} is already in phonebook`);
   };
 
   return (
