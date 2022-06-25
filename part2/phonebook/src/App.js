@@ -1,46 +1,30 @@
 import { useState } from "react";
 
+// for section titles
 const Header = ({ title }) => <h2>{title}</h2>;
 
-const PersonDisplay = ({ persons }) => {
-  return persons.map((person) => {
-    return (
-      <div key={person.id}>
-        {person.name} {person.number}
-      </div>
-    );
-  });
-};
-
-const Persons = ({ persons, filter }) => {
-  if (filter !== "") {
-    const filtered = persons.filter((person) =>
-      person.name.toLowerCase().includes(filter)
-    );
-    return <PersonDisplay persons={filtered} />;
-  } else return <PersonDisplay persons={persons} />;
-};
-
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: Math.random(1, 9999) },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: Math.random(1, 9999) },
-    { name: "Dan Abramov", number: "12-43-234345", id: Math.random(1, 9999) },
-    {
-      name: "Mary Poppendieck",
-      number: "39-23-6423122",
-      id: Math.random(1, 9999),
-    },
-  ]);
-
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [filterName, setFilterName] = useState("");
-
+// handiling filtering the name
+const Filter = ({ filterName, setFilterName }) => {
   const handleNewFilter = (event) => {
     setFilterName(event.target.value);
   };
 
+  return (
+    <div>
+      filter shown with: <input value={filterName} onChange={handleNewFilter} />
+    </div>
+  );
+};
+
+// handling the form behavior and adding person to the phonebook
+const Form = ({
+  newName,
+  setNewName,
+  setNewNumber,
+  newNumber,
+  persons,
+  setPersons,
+}) => {
   const handleNewPerson = (event) => {
     setNewName(event.target.value);
   };
@@ -61,19 +45,12 @@ const App = () => {
       };
       setPersons(persons.concat(newObj));
       setNewName("");
+      setNewNumber("");
     } else alert(`${newName} is already in phonebook`);
   };
 
   return (
-    <div>
-      <Header title="Phonebook" />
-      <div>
-        filter shown with:{" "}
-        <input value={filterName} onChange={handleNewFilter} />
-      </div>
-
-      <Header title="add a new" />
-
+    <>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNewPerson} />
@@ -85,6 +62,59 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
+    </>
+  );
+};
+
+// Displaying the selected persons from the list
+const PersonDisplay = ({ persons }) => {
+  return persons.map((person) => {
+    return (
+      <div key={person.id}>
+        {person.name} {person.number}
+      </div>
+    );
+  });
+};
+
+// To handle which persons to display
+const Persons = ({ persons, filter }) => {
+  if (filter !== "") {
+    const filtered = persons.filter((person) =>
+      person.name.toLowerCase().includes(filter)
+    );
+    return <PersonDisplay persons={filtered} />;
+  } else return <PersonDisplay persons={persons} />;
+};
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "040-123456", id: Math.random(1, 9999) },
+    { name: "Ada Lovelace", number: "39-44-5323523", id: Math.random(1, 9999) },
+    { name: "Dan Abramov", number: "12-43-234345", id: Math.random(1, 9999) },
+    { name: "Mary Poppen", number: "39-23-6423122", id: Math.random(1, 9999) },
+  ]);
+
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
+  const [filterName, setFilterName] = useState("");
+
+  return (
+    <div>
+      <Header title="Phonebook" />
+
+      <Filter value={filterName} setFilterName={setFilterName} />
+
+      <Header title="add a new" />
+
+      <Form
+        newName={newName}
+        setNewName={setNewName}
+        newNumber={newNumber}
+        setNewNumber={setNewNumber}
+        persons={persons}
+        setPersons={setPersons}
+      />
 
       <Header title="Numbers" />
       <Persons persons={persons} filter={filterName} />
