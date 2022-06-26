@@ -25,27 +25,45 @@ const Languages = ({ languages }) => {
 };
 
 const FullDisplay = ({ result }) => {
-  let country = result[0];
+  if (result !== "") {
+    let country = result;
+    return (
+      <>
+        <h1>{country.name.common}</h1>
+        <p>
+          capital {country.capital[0]}
+          <br></br>
+          area {country.area}
+        </p>
+        <b>languages:</b>
+        <ul>
+          <Languages languages={country.languages} />
+        </ul>
+        <img width="10%" src={country.flags.svg} />
+      </>
+    );
+  }
+};
+
+const Country = ({ country }) => {
+  const [infoDisplay, setInfoDisplay] = useState("");
+
   return (
-    <>
-      <h1>{country.name.common}</h1>
-      <p>
-        capital {country.capital[0]}
-        <br></br>
-        area {country.area}
-      </p>
-      <b>languages:</b>
-      <ul>
-        <Languages languages={country.languages} />
-      </ul>
-      <img width="10%" src={country.flags.svg} />
-    </>
+    <div key={country.tld[0]}>
+      <div>
+        {country.name.common}
+        <button onClick={() => setInfoDisplay(country)}>show</button>
+      </div>
+      <FullDisplay result={infoDisplay} />
+    </div>
   );
 };
 
 const Display = ({ result }) => {
+  let id = 0;
   return result.map((countries) => {
-    return <div key={countries.tld[0]}>{countries.name.common}</div>;
+    id += 1;
+    return <Country key={id} country={countries} />;
   });
 };
 
@@ -61,7 +79,7 @@ const Filter = ({ search, countries }) => {
     } else if (result.length === 1) {
       return (
         <>
-          <FullDisplay result={result} />
+          <FullDisplay result={result[0]} />
         </>
       );
     } else {
