@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 // for section titles
 const Header = ({ title }) => <h2>{title}</h2>;
@@ -88,17 +89,16 @@ const Persons = ({ persons, filter }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: Math.random(1, 9999) },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: Math.random(1, 9999) },
-    { name: "Dan Abramov", number: "12-43-234345", id: Math.random(1, 9999) },
-    { name: "Mary Poppen", number: "39-23-6423122", id: Math.random(1, 9999) },
-  ]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState("");
 
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
   return (
     <div>
       <Header title="Phonebook" />
