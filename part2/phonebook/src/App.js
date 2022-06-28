@@ -48,7 +48,25 @@ const Delete = ({ name, id, persons, setPersons }) => {
   );
 };
 
-// const UpdateNumber = () => {};
+const Message = ({ message, setMessage, errMsg }) => {
+  let C = errMsg > 0 ? "red" : "green";
+  const Msg = {
+    color: C,
+    fontStyle: "italic",
+    fontSize: "20px",
+    borderStyle: "solid",
+    borderRadius: "5px",
+    padding: "10px",
+    marginBottom: "10px",
+  };
+  if (message) {
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+
+    return <div style={Msg}>{message}</div>;
+  }
+};
 
 // handling the form behavior and adding person to the phonebook
 const Form = ({
@@ -58,6 +76,8 @@ const Form = ({
   newNumber,
   persons,
   setPersons,
+  setMessage,
+  setErrMsg,
 }) => {
   const handleNewPerson = (event) => {
     setNewName(event.target.value);
@@ -79,20 +99,31 @@ const Form = ({
       };
       AddToServer(newObj);
       setPersons(persons.concat(newObj));
+      setMessage(`Added ${newName}`);
     } else {
       if (nameCheck[0].number !== newNumber) {
         nameCheck[0].number = newNumber;
-        UpdateServer(nameCheck[0].id, nameCheck[0]).then((response) => {
-          setPersons(
-            persons.map((person) =>
-              person.id !== nameCheck[0].id ? person : response.data
-            )
-          );
-        });
-      } else alert(`${newName} is already in phonebook`);
+        UpdateServer(nameCheck[0].id, nameCheck[0])
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== nameCheck[0].id ? person : response.data
+              )
+            );
+          })
+          .catch((error) => {
+            setErrMsg(1);
+            setMessage(
+              `Information of '${newName}' was already removed from server`
+            );
+          });
+        setMessage(`${newName} number has been changed`);
+        // }
+      } else setMessage(`${newName} already existed`);
     }
     setNewName("");
     setNewNumber("");
+    setErrMsg(0);
   };
 
   return (
@@ -144,6 +175,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState("");
+  const [message, setMessage] = useState("");
+  const [errMsg, setErrMsg] = useState(0);
 
   useEffect(() => {
     axios.get("http://localhost:3001/persons").then((response) => {
@@ -153,7 +186,7 @@ const App = () => {
   return (
     <div>
       <Header title="Phonebook" />
-
+      <Message message={message} setMessage={setMessage} errMsg={errMsg} />
       <Filter value={filterName} setFilterName={setFilterName} />
 
       <Header title="add a new" />
@@ -165,6 +198,8 @@ const App = () => {
         setNewNumber={setNewNumber}
         persons={persons}
         setPersons={setPersons}
+        setMessage={setMessage}
+        setErrMsg={setErrMsg}
       />
 
       <Header title="Numbers" />
