@@ -23,6 +23,27 @@ const UpdateServer = (newObj) => {
   return axios.post(baseUrl, newObj);
 };
 
+const DeleteFromServer = (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+
+const Delete = ({ name, id, persons, setPersons }) => {
+  const DeleteUser = (name, id, persons, setPersons) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      let tmpArr = persons.filter((elem) => {
+        return elem.id !== id;
+      });
+      DeleteFromServer(id);
+      setPersons(tmpArr);
+    }
+  };
+  return (
+    <button onClick={() => DeleteUser(name, id, persons, setPersons)}>
+      Delete
+    </button>
+  );
+};
+
 // handling the form behavior and adding person to the phonebook
 const Form = ({
   newName,
@@ -75,24 +96,30 @@ const Form = ({
 };
 
 // Displaying the selected persons from the list
-const PersonDisplay = ({ persons }) => {
+const PersonDisplay = ({ persons, setPersons }) => {
   return persons.map((person) => {
     return (
       <div key={person.id}>
-        {person.name} {person.number}
+        {person.name} {person.number}{" "}
+        <Delete
+          name={person.name}
+          persons={persons}
+          id={person.id}
+          setPersons={setPersons}
+        ></Delete>
       </div>
     );
   });
 };
 
 // To handle which persons to display
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, setPersons }) => {
   if (filter !== "") {
     const filtered = persons.filter((person) =>
       person.name.toLowerCase().includes(filter.toLowerCase())
     );
-    return <PersonDisplay persons={filtered} />;
-  } else return <PersonDisplay persons={persons} />;
+    return <PersonDisplay persons={filtered} setPersons={setPersons} />;
+  } else return <PersonDisplay persons={persons} setPersons={setPersons} />;
 };
 
 const App = () => {
@@ -124,7 +151,7 @@ const App = () => {
       />
 
       <Header title="Numbers" />
-      <Persons persons={persons} filter={filterName} />
+      <Persons persons={persons} filter={filterName} setPersons={setPersons} />
     </div>
   );
 };
