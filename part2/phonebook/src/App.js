@@ -26,6 +26,7 @@ const Form = ({
   persons,
   setPersons,
 }) => {
+  const url = "http://localhost:3001/persons";
   const handleNewPerson = (event) => {
     setNewName(event.target.value);
   };
@@ -44,9 +45,14 @@ const Form = ({
         number: newNumber,
         id: Math.random(1, 9999),
       };
-      setPersons(persons.concat(newObj));
-      setNewName("");
-      setNewNumber("");
+
+      // ajax call to update the phonebook
+      axios.post(url, newObj).then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName("");
+        setNewNumber("");
+      });
+      // UpdateServer(persons);
     } else alert(`${newName} is already in phonebook`);
   };
 
@@ -82,7 +88,7 @@ const PersonDisplay = ({ persons }) => {
 const Persons = ({ persons, filter }) => {
   if (filter !== "") {
     const filtered = persons.filter((person) =>
-      person.name.toLowerCase().includes(filter)
+      person.name.toLowerCase().includes(filter.toLowerCase())
     );
     return <PersonDisplay persons={filtered} />;
   } else return <PersonDisplay persons={persons} />;
