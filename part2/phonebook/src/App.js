@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const baseUrl = "http://localhost:3001/persons";
+
 // for section titles
 const Header = ({ title }) => <h2>{title}</h2>;
 
@@ -17,6 +19,10 @@ const Filter = ({ filterName, setFilterName }) => {
   );
 };
 
+const UpdateServer = (newObj) => {
+  return axios.post(baseUrl, newObj);
+};
+
 // handling the form behavior and adding person to the phonebook
 const Form = ({
   newName,
@@ -26,7 +32,6 @@ const Form = ({
   persons,
   setPersons,
 }) => {
-  const url = "http://localhost:3001/persons";
   const handleNewPerson = (event) => {
     setNewName(event.target.value);
   };
@@ -45,14 +50,10 @@ const Form = ({
         number: newNumber,
         id: Math.random(1, 9999),
       };
-
-      // ajax call to update the phonebook
-      axios.post(url, newObj).then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-      });
-      // UpdateServer(persons);
+      UpdateServer(newObj);
+      setPersons(persons.concat(newObj));
+      setNewName("");
+      setNewNumber("");
     } else alert(`${newName} is already in phonebook`);
   };
 
