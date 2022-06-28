@@ -19,8 +19,12 @@ const Filter = ({ filterName, setFilterName }) => {
   );
 };
 
-const UpdateServer = (newObj) => {
+const AddToServer = (newObj) => {
   return axios.post(baseUrl, newObj);
+};
+
+const UpdateServer = (id, newObj) => {
+  return axios.put(`${baseUrl}/${id}`, newObj);
 };
 
 const DeleteFromServer = (id) => {
@@ -43,6 +47,8 @@ const Delete = ({ name, id, persons, setPersons }) => {
     </button>
   );
 };
+
+// const UpdateNumber = () => {};
 
 // handling the form behavior and adding person to the phonebook
 const Form = ({
@@ -71,11 +77,22 @@ const Form = ({
         number: newNumber,
         id: Math.random(1, 9999),
       };
-      UpdateServer(newObj);
+      AddToServer(newObj);
       setPersons(persons.concat(newObj));
-      setNewName("");
-      setNewNumber("");
-    } else alert(`${newName} is already in phonebook`);
+    } else {
+      if (nameCheck[0].number !== newNumber) {
+        nameCheck[0].number = newNumber;
+        UpdateServer(nameCheck[0].id, nameCheck[0]).then((response) => {
+          setPersons(
+            persons.map((person) =>
+              person.id !== nameCheck[0].id ? person : response.data
+            )
+          );
+        });
+      } else alert(`${newName} is already in phonebook`);
+    }
+    setNewName("");
+    setNewNumber("");
   };
 
   return (
