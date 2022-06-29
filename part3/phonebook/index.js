@@ -1,6 +1,9 @@
 const express = require("express");
 
 const app = express();
+
+app.use(express.json());
+
 let persons = [
   {
     id: 1,
@@ -23,8 +26,6 @@ let persons = [
     number: "12-43-111345",
   },
 ];
-
-app.use(express.json());
 
 const generateId = () => {
   const randId = Math.floor(Math.random(0, 99) * 1000000);
@@ -52,20 +53,30 @@ app.get("/api/persons/:id", (request, response) => {
 // adds a person to the phonebook
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-  if (!body.name) {
-    response.status(400).json({
-      error: "content missing",
-    });
-  }
+  errorHandling(body, response);
   const person = {
     id: generateId(),
     name: body.name,
     number: body.number,
   };
-  console.log(person);
   persons = persons.concat(person);
   response.json(persons);
 });
+
+// function to check for errors in inputs
+const errorHandling = (body, response) => {
+  const checkPerson = persons.find((person) => person.name === body.name);
+
+  if (!body.name || !body.number) {
+    response.status(400).json({
+      error: "content missing",
+    });
+  } else if (checkPerson) {
+    response.status(400).json({
+      error: "name must be unique",
+    });
+  }
+};
 
 // deletes a person by giving an id
 app.delete("/api/persons/:id", (request, response) => {
