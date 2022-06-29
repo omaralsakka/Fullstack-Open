@@ -24,6 +24,13 @@ let persons = [
   },
 ];
 
+app.use(express.json());
+
+const generateId = () => {
+  const randId = Math.floor(Math.random(0, 99) * 1000000);
+  return randId;
+};
+
 // fetches all phonebook names
 app.get("/api/persons", (request, response) => {
   response.json(persons);
@@ -42,6 +49,25 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+// adds a person to the phonebook
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+  if (!body.name) {
+    response.status(400).json({
+      error: "content missing",
+    });
+  }
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+  console.log(person);
+  persons = persons.concat(person);
+  response.json(persons);
+});
+
+// deletes a person by giving an id
 app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   persons = persons.filter((person) => person.id !== id);
