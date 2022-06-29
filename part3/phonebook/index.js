@@ -1,10 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const cors = require("cors");
 
 app.use(express.json());
 app.use(morgan("tiny"));
-
+app.use(cors());
 let persons = [
   {
     id: 1,
@@ -94,8 +95,9 @@ app.get("/info", (request, response) => {
   response.end(info);
 });
 
-const PORT = 3001;
-
+// We either run our port on Heroku's configuration which uses .env.PORT
+// or we use port 3001
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
