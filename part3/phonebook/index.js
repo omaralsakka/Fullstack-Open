@@ -1,7 +1,7 @@
 const express = require("express");
 
 const app = express();
-const persons = [
+let persons = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -17,12 +17,19 @@ const persons = [
     name: "Dan Abramov",
     number: "12-43-234345",
   },
+  {
+    id: 4,
+    name: "Omar Alsakka",
+    number: "12-43-111345",
+  },
 ];
 
+// fetches all phonebook names
 app.get("/api/persons", (request, response) => {
   response.json(persons);
 });
 
+// fetches a single user if exist
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
 
@@ -35,6 +42,13 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  persons = persons.filter((person) => person.id !== id);
+  response.status(204).end();
+});
+
+// fetches info about the whole phonebook
 app.get("/info", (request, response) => {
   const ppl = persons.length;
   const date = new Date();
