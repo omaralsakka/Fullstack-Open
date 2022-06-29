@@ -17,15 +17,17 @@ const persons = [
     name: "Dan Abramov",
     number: "12-43-234345",
   },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
 ];
 
-app.get("/api/persons/", (request, response) => {
+app.get("/api/persons", (request, response) => {
   response.json(persons);
+});
+
+app.get("/info", (request, response) => {
+  const ppl = persons.length;
+  const date = new Date();
+  const info = `Phonebook has info for ${ppl} people\n${date}`;
+  response.end(info);
 });
 
 const PORT = 3001;
