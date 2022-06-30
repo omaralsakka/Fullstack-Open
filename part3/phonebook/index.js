@@ -48,14 +48,14 @@ app.post("/api/persons", (request, response) => {
     let obj = persons.find((person) => person.name === body.name);
 
     if (obj) {
-      if (body.number !== obj.number) {
+      if (!obj.number.includes(body.number)) {
         Person.findByIdAndUpdate(obj.id, {
           number: `${obj.number}, ${body.number}`,
         }).then((updatedPerson) => {
           response.json(updatedPerson);
         });
       } else {
-        console.log("number in db");
+        console.log("number in database");
       }
     } else {
       // Save the new person and response only if success
@@ -84,6 +84,25 @@ app.get("/info", (request, response) => {
   const info = `Phonebook has info for ${ppl} people\n${date}`;
   response.end(info);
 });
+
+const unknownEndPoint = (request, response) => {
+  return response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndPoint);
+
+// error handling function for when id is wrong
+const errorHandler = (error, response, request, next) => {
+  console.log(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 // We either run our port on Heroku's configuration which uses .env.PORT
 // or we use port 3001
