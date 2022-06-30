@@ -25,8 +25,8 @@ if (process.argv.length < 5 && process.argv.length > 3) {
   console.log(
     "please provide the person data as an argument: node mongo.js <password> <name> <phone number>"
   );
-} else if (process.argv.length == 3) {
-  mongoose.connect(url).then((result) => {
+} else if (process.argv.length === 3) {
+  mongoose.connect(url).then(() => {
     Person.find({}).then((result) => {
       result.forEach((person) => {
         console.log(person);
@@ -34,10 +34,10 @@ if (process.argv.length < 5 && process.argv.length > 3) {
       mongoose.connection.close();
     });
   });
-} else if (process.argv.length == 5) {
+} else if (process.argv.length === 5) {
   mongoose
     .connect(url)
-    .then((result) => {
+    .then(() => {
       const person = new Person({
         name: process.argv[3],
         number: process.argv[4],

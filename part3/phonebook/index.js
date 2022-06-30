@@ -10,11 +10,6 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(express.static("build"));
 
-const generateId = () => {
-  const randId = Math.floor(Math.random(0, 99) * 1000000);
-  return randId;
-};
-
 // fetches all phonebook names
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
@@ -76,18 +71,10 @@ app.post("/api/persons", (request, response, next) => {
 app.delete("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   Person.findByIdAndRemove(id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
-});
-
-// fetches info about the whole phonebook
-app.get("/info", (request, response) => {
-  const ppl = persons.length;
-  const date = new Date();
-  const info = `Phonebook has info for ${ppl} people\n${date}`;
-  response.end(info);
 });
 
 const unknownEndPoint = (request, response) => {
