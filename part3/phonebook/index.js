@@ -10,29 +10,6 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(express.static("build"));
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Omar Alsakka",
-    number: "12-43-111345",
-  },
-];
-
 const generateId = () => {
   const randId = Math.floor(Math.random(0, 99) * 1000000);
   return randId;
@@ -59,35 +36,49 @@ app.get("/api/persons/:id", (request, response) => {
 // adds a person to the phonebook
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-  errorHandling(body, response);
 
   // Person is the module returned now from person module.
   const person = new Person({
     name: body.name,
     number: body.number,
   });
+  Person.find({}).then((persons) => {
+    let obj = persons.find((person) => person.name === body.name);
 
-  // Save the new person and response only if success
-  person.save().then((savedPerson) => {
-    // the data coming back is stringfy modified response
-    response.json(savedPerson);
+    if (obj) {
+      if (body.number !== obj.number) {
+        Person.findByIdAndUpdate(obj.id, {
+          number: `${obj.number}, ${body.number}`,
+        }).then((updatedPerson) => {
+          response.json(updatedPerson);
+        });
+      } else {
+        console.log("number in db");
+      }
+    } else {
+      // Save the new person and response only if success
+      person.save().then((savedPerson) => {
+        // the data coming back is stringfy modified response
+        response.json(savedPerson);
+      });
+    }
   });
 });
 
 // function to check for errors in inputs
-const errorHandling = (body, response) => {
-  const checkPerson = persons.find((person) => person.name === body.name);
+// const errorHandling = (body, response) => {
+//   const checkPerson = Persons.find((person) => person.name === body.name);
 
-  if (!body.name || !body.number) {
-    response.status(400).json({
-      error: "content missing",
-    });
-  } else if (checkPerson) {
-    response.status(400).json({
-      error: "name must be unique",
-    });
-  }
-};
+//   if (!body.name || !body.number) {
+//     response.status(400).json({
+//       error: "content missing",
+//     });
+//   } else if (checkPerson) {
+//     response.status(400).json({
+//       error: "name must be unique",
+//     });
+//   }
+// };
 
 // deletes a person by giving an id
 app.delete("/api/persons/:id", (request, response) => {

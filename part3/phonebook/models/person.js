@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// REMEMBER TO DELETE PASSWORD FROM HERE!!!
 const url = process.env.MONGODB_URI;
 
 console.log("connecting to", url);
