@@ -23,14 +23,16 @@ app.get("/api/persons", (request, response) => {
 });
 
 // fetches a single user if exist
-app.get("/api/persons/:id", (request, response) => {
-  Person.findById(request.params.id).then((person) => {
-    if (person) {
-      response.json(person);
-    } else {
-      response.status(404).end();
-    }
-  });
+app.get("/api/persons/:id", (request, response, next) => {
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
 // adds a person to the phonebook
@@ -65,26 +67,14 @@ app.post("/api/persons", (request, response) => {
   });
 });
 
-// function to check for errors in inputs
-// const errorHandling = (body, response) => {
-//   const checkPerson = Persons.find((person) => person.name === body.name);
-
-//   if (!body.name || !body.number) {
-//     response.status(400).json({
-//       error: "content missing",
-//     });
-//   } else if (checkPerson) {
-//     response.status(400).json({
-//       error: "name must be unique",
-//     });
-//   }
-// };
-
 // deletes a person by giving an id
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  response.status(204).end();
+  const id = request.params.id;
+  Person.findByIdAndRemove(id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 // fetches info about the whole phonebook
