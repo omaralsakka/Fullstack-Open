@@ -1,3 +1,5 @@
+require("dotenv").config();
+const Person = require("./models/person");
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -38,33 +40,38 @@ const generateId = () => {
 
 // fetches all phonebook names
 app.get("/api/persons", (request, response) => {
-  response.json(persons);
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
 });
 
 // fetches a single user if exist
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-
-  const person = persons.find((person) => person.id === id);
-
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+  Person.findById(request.params.id).then((person) => {
+    if (person) {
+      response.json(person);
+    } else {
+      response.status(404).end();
+    }
+  });
 });
 
 // adds a person to the phonebook
 app.post("/api/persons", (request, response) => {
   const body = request.body;
   errorHandling(body, response);
-  const person = {
-    id: generateId(),
+
+  // Person is the module returned now from person module.
+  const person = new Person({
     name: body.name,
     number: body.number,
-  };
-  persons = persons.concat(person);
-  response.json(persons);
+  });
+
+  // Save the new person and response only if success
+  person.save().then((savedPerson) => {
+    // the data coming back is stringfy modified response
+    response.json(savedPerson);
+  });
 });
 
 // function to check for errors in inputs
