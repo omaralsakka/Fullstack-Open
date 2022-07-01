@@ -1,0 +1,33 @@
+POST http://localhost:3003/api/blogs/ 
+content-type: application/json
+
+{
+  "title": "Google Blog",
+  "author": "Google",
+  "url": "google.com",
+  "likes": 8
+}
+
+###
+
+POST http://localhost:3003/api/blogs/ 
+content-type: application/json
+
+{
+  "title": "Wiki Blog",
+  "author": "Wikipedia",
+  "url": "wikipedia.com",
+  "likes": 5
+}
+
+###
+
+POST http://localhost:3003/api/blogs/ 
+content-type: application/json
+
+{
+  "title": "Elden Ring",
+  "author": "Elden lord",
+  "url": "eldenring.com",
+  "likes": 100
+}
