@@ -8,4 +8,13 @@ const totalLikes = (blogs) => {
   }, 0);
 };
 
-module.exports = { dummy, totalLikes };
+const favoriteBlog = (blogs) => {
+  let maxLikes = blogs.reduce((max, blog) => {
+    return max > blog.likes ? max : (max = blog.likes);
+  }, 0);
+  return blogs.find((elem) => {
+    return elem.likes === maxLikes;
+  });
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog };
