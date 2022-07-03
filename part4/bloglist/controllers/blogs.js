@@ -8,7 +8,6 @@ blogsRouter.get("/", (request, response) => {
 });
 
 blogsRouter.get("/:id", (request, response, next) => {
-  console.log("here in get with id!");
   Blog.findById(request.params.id)
     .then((blog) => {
       if (blog) {
@@ -23,9 +22,13 @@ blogsRouter.get("/:id", (request, response, next) => {
 blogsRouter.post("/", (request, response) => {
   const blog = new Blog(request.body);
 
-  blog.save().then((result) => {
-    response.status(201).json(result);
-  });
+  if (!blog.title || !blog.url) {
+    response.status(400).end();
+  } else {
+    blog.save().then((result) => {
+      response.status(201).json(result);
+    });
+  }
 });
 
 module.exports = blogsRouter;

@@ -2,9 +2,9 @@ POST http://localhost:3003/api/blogs/
 content-type: application/json
 
 {
-  "title": "Google Blog",
+  "title": "",
   "author": "Google",
-  "url": "google.com",
+  "url": "",
   "likes": 8
 }
 
