@@ -15,7 +15,6 @@ describe("Initilized blogs into db", () => {
   test("likes default to 0 in undefined", async () => {
     const resp = await api.get("/api/blogs");
     const res = resp.body.map((cont) => cont.likes);
-    console.log(res);
     expect(res).toContain(0);
   });
 
@@ -52,11 +51,27 @@ describe("Handling error inputs", () => {
 });
 
 describe("Updating & Deleting blogs", () => {
+  test("updating blog", async () => {
+    let blogsInDb = await blogsDb();
+    let blogToUpdate = blogsInDb[0];
+
+    // console.log("this is the id", blogToUpdate.id);
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({ likes: 41 });
+
+    const response = await api.get("/api/blogs");
+    const contents = response.body;
+
+    expect(200);
+    expect(contents[0].likes).toEqual(41);
+  });
+
   test("deleting blog", async () => {
     let blogsInDb = await blogsDb();
     let blogToDelete = blogsInDb[0];
     await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
   });
+
+  test("updating blog", async () => {});
 });
 
 afterAll(() => {
