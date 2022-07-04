@@ -51,6 +51,43 @@ describe("Initializing users in db", () => {
   });
 });
 
+describe("Bad inputs for user creation", () => {
+  test("Short username", async () => {
+    const shortName = {
+      username: "al",
+      name: "Mohamed Salah",
+      password: "123456",
+    };
+    await api.post("/api/users").send(shortName).expect(401);
+  });
+
+  test("Short password", async () => {
+    const shortName = {
+      username: "mohsalah",
+      name: "Mohamed Salah",
+      password: "12",
+    };
+    await api.post("/api/users").send(shortName).expect(401);
+  });
+
+  test("Unique username", async () => {
+    const newUser = {
+      username: "oabdelfa",
+      name: "Omar Abdelfattah",
+      password: "123456",
+    };
+
+    await api.post("/api/users").send(newUser);
+
+    const sameUserName = {
+      username: "oabdelfa",
+      name: "Mohamed",
+      password: "123456889",
+    };
+    await api.post("/api/users").send(sameUserName).expect(401);
+  });
+});
+
 describe("Initilized blogs into db", () => {
   test("likes default to 0 in undefined", async () => {
     const resp = await api.get("/api/blogs");
