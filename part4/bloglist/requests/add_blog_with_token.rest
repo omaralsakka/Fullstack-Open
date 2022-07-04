@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVsZWUiLCJpZCI6IjYyYzJlODhiYzkxNTBmYmZjMDg2ZDg3ZSIsImlhdCI6MTY1Njk1MTczMn0.nQhx1CpMm5O8MIvz0LlnMEM0GbLcYB8agLC0zGTjsJw
+
+{
+  "title": " Blog",
+  "author": "Wikipedia",
+  "url": "wikipedia.com",
+  "likes": 5
+}
