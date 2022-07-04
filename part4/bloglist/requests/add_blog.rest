@@ -2,10 +2,11 @@ POST http://localhost:3003/api/blogs/
 content-type: application/json
 
 {
-  "title": "",
+  "title": "google with id",
   "author": "Google",
-  "url": "",
-  "likes": 8
+  "url": "google.com",
+  "likes": 8,
+  "userId": "62c2e3fd60eeaae59e79ae01"
 }
 
 ###
