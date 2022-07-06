@@ -4,6 +4,8 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import LoggedUser from "./components/loggedUser";
 import Message from "./components/message";
+import LoginForm from "./components/loginForm";
+import BlogForm from "./components/blogForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,6 +16,8 @@ const App = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newUrl, setNewUrl] = useState("");
+  const [loginVisible, setLoginVisible] = useState(false);
+  const [blogFormVisible, setBlogFormVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -74,66 +78,51 @@ const App = () => {
     });
   };
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
+  const loginForm = () => {
+    const hide = { display: loginVisible ? "none" : "" };
+    const show = { display: loginVisible ? "" : "none" };
+    return (
       <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => {
-            setUserName(target.value);
-          }}
-        />
+        <div style={hide}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={show}>
+          <LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            setUserName={setUserName}
+            password={password}
+            setPassword={setPassword}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
       </div>
-      <div>
-        password
-        <input
-          type="text"
-          value={password}
-          name="Username"
-          onChange={({ target }) => {
-            setPassword(target.value);
-          }}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  );
+    );
+  };
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      title:
-      <input
-        type="text"
-        value={newTitle}
-        onChange={({ target }) => {
-          setNewTitle(target.value);
-        }}
-      />
-      <br />
-      author:
-      <input
-        type="text"
-        value={newAuthor}
-        onChange={({ target }) => {
-          setNewAuthor(target.value);
-        }}
-      />
-      <br />
-      url:
-      <input
-        type="text"
-        value={newUrl}
-        onChange={({ target }) => {
-          setNewUrl(target.value);
-        }}
-      />
-      <br />
-      <button type="submit">create</button>
-    </form>
-  );
+  const blogForm = () => {
+    const hide = { display: blogFormVisible ? "none" : "" };
+    const show = { display: blogFormVisible ? "" : "none" };
+    return (
+      <div>
+        <div style={hide}>
+          <button onClick={() => setBlogFormVisible(true)}>new blog</button>
+        </div>
+        <div style={show}>
+          <BlogForm
+            addBlog={addBlog}
+            newTitle={newTitle}
+            setNewTitle={setNewTitle}
+            newAuthor={newAuthor}
+            setNewAuthor={setNewAuthor}
+            newUrl={newUrl}
+            setNewUrl={setNewUrl}
+          />
+          <button onClick={() => setBlogFormVisible(false)}>cancel</button>
+        </div>
+      </div>
+    );
+  };
 
   if (user === null) {
     return (
