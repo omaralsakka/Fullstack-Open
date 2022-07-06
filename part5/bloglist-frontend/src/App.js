@@ -6,6 +6,7 @@ import LoggedUser from "./components/loggedUser";
 import Message from "./components/message";
 import LoginForm from "./components/loginForm";
 import BlogForm from "./components/blogForm";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,11 +14,6 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState("");
-  const [newTitle, setNewTitle] = useState("");
-  const [newAuthor, setNewAuthor] = useState("");
-  const [newUrl, setNewUrl] = useState("");
-  const [loginVisible, setLoginVisible] = useState(false);
-  const [blogFormVisible, setBlogFormVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -56,72 +52,10 @@ const App = () => {
     }
   };
 
-  const addBlog = (event) => {
-    event.preventDefault();
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-      likes: 0,
-      id: blogs.length + 1,
-    };
-
+  const addBlog = (blogObject) => {
     blogService.create(blogObject).then((returnedblog) => {
-      setMessage({
-        txt: `a new blog ${newTitle} by ${newAuthor} added`,
-        type: 1,
-      });
       setBlogs(blogs.concat(returnedblog));
-      setNewTitle("");
-      setNewAuthor("");
-      setNewUrl("");
     });
-  };
-
-  const loginForm = () => {
-    const hide = { display: loginVisible ? "none" : "" };
-    const show = { display: loginVisible ? "" : "none" };
-    return (
-      <div>
-        <div style={hide}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={show}>
-          <LoginForm
-            handleLogin={handleLogin}
-            username={username}
-            setUserName={setUserName}
-            password={password}
-            setPassword={setPassword}
-          />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
-    );
-  };
-
-  const blogForm = () => {
-    const hide = { display: blogFormVisible ? "none" : "" };
-    const show = { display: blogFormVisible ? "" : "none" };
-    return (
-      <div>
-        <div style={hide}>
-          <button onClick={() => setBlogFormVisible(true)}>new blog</button>
-        </div>
-        <div style={show}>
-          <BlogForm
-            addBlog={addBlog}
-            newTitle={newTitle}
-            setNewTitle={setNewTitle}
-            newAuthor={newAuthor}
-            setNewAuthor={setNewAuthor}
-            newUrl={newUrl}
-            setNewUrl={setNewUrl}
-          />
-          <button onClick={() => setBlogFormVisible(false)}>cancel</button>
-        </div>
-      </div>
-    );
   };
 
   if (user === null) {
@@ -129,7 +63,15 @@ const App = () => {
       <div>
         {message && <Message message={message} setMessage={setMessage} />}
         <h2>Log in to application</h2>
-        {loginForm()}
+        <Togglable buttonLabel="Log in">
+          <LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            setUserName={setUserName}
+            password={password}
+            setPassword={setPassword}
+          />
+        </Togglable>
       </div>
     );
   } else {
@@ -138,7 +80,9 @@ const App = () => {
         <h2>blogs</h2>
         {message && <Message message={message} setMessage={setMessage} />}
         <LoggedUser user={user} setUser={setUser} setMessage={setMessage} />
-        {blogForm()}
+        <Togglable buttonLabel="new blog">
+          <BlogForm createBlog={addBlog} setMessage={setMessage} />
+        </Togglable>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
