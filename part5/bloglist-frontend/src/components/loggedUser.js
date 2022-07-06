@@ -1,9 +1,15 @@
-const LoggedUser = ({ user, setUser }) => {
-  console.log("This is user in logged file", user.name);
+const handleLogOut = (setUser, setMessage) => {
+  const msg = { txt: "logged out", type: 1 };
+  window.localStorage.clear();
+  setUser(null);
+  setMessage(msg);
+};
+
+const LoggedUser = ({ user, setUser, setMessage }) => {
   return (
     <div>
       {user.name} logged in
-      <button onClick={() => setUser(null)}>logout</button>
+      <button onClick={() => handleLogOut(setUser, setMessage)}>logout</button>
       <br />
       <br />
     </div>
