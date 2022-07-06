@@ -64,6 +64,10 @@ const App = () => {
     };
 
     blogService.create(blogObject).then((returnedblog) => {
+      setMessage({
+        txt: `a new blog ${newTitle} by ${newAuthor} added`,
+        type: 1,
+      });
       setBlogs(blogs.concat(returnedblog));
       setNewTitle("");
       setNewAuthor("");
