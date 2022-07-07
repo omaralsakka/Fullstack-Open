@@ -31,6 +31,13 @@ const App = () => {
     }
   }, []);
 
+  const refreshBlogs = () => {
+    blogService.getAll().then((blogs) => {
+      blogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(blogs);
+    });
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -65,10 +72,15 @@ const App = () => {
     let newObj = blog;
     newObj.likes += 1;
     blogService.likeBlog(newObj.id, newObj);
-    blogService.getAll().then((blogs) => {
-      blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogs);
-    });
+    refreshBlogs();
+  };
+
+  const DeleteButton = (blog) => {
+    let confirm = window.confirm(`Remove blog ${blog.title} by ${blog.author}`);
+    if (confirm) {
+      blogService.deleteBlog(blog.id);
+      refreshBlogs();
+    }
   };
 
   if (user === null) {
@@ -102,6 +114,7 @@ const App = () => {
             blog={blog}
             LikeButton={LikeButton}
             name={user.name}
+            DeleteButton={DeleteButton}
           />
         ))}
       </div>
