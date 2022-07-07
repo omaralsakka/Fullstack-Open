@@ -50,5 +50,15 @@ describe("Blog app", function () {
       cy.contains("create").click();
       cy.contains("a test note by cyprees CypressTest");
     });
+
+    it("like button works", function () {
+      cy.get("#title").type("a test note by cyprees");
+      cy.get("#author").type("CypressTest");
+      cy.get("#url").type("cyprees.com");
+      cy.contains("create").click();
+      cy.contains("view").click();
+      cy.contains("like").click();
+      cy.contains("1");
+    });
   });
 });
