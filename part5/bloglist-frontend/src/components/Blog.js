@@ -1,3 +1,5 @@
+import Togglable from "./Togglable";
+
 let blogStyle = {
   display: "flex",
   justifyContent: "center",
@@ -29,18 +31,20 @@ const Blog = ({ blog, LikeButton, name, DeleteButton }) => {
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author} <br />
-      {blog.url} <br />
-      {blog.likes}
-      <button style={buttonStyle} onClick={() => LikeButton(blog)}>
-        like
-      </button>{" "}
-      <br />
-      {name} <br />
-      <button style={removeStyle} onClick={() => DeleteButton(blog)}>
-        remove
-      </button>
-      <br />
-      <br />
+      <Togglable buttonLabel="view">
+        {blog.url} <br />
+        {blog.likes}
+        <button style={buttonStyle} onClick={() => LikeButton(blog)}>
+          like
+        </button>{" "}
+        <br />
+        {name} <br />
+        <button style={removeStyle} onClick={() => DeleteButton(blog)}>
+          remove
+        </button>
+        <br />
+        <br />
+      </Togglable>
     </div>
   );
 };
