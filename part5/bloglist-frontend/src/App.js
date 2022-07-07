@@ -8,6 +8,23 @@ import LoginForm from "./components/loginForm";
 import BlogForm from "./components/blogForm";
 import Togglable from "./components/Togglable";
 
+const blogStyle = {
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
+  width: "10%",
+  backgroundColor: "rgb(228, 239, 176)",
+  border: "1px solid black",
+  borderRadius: "5px",
+  padding: "5px",
+  marginBottom: "5px",
+};
+
+let buttonStyle = {
+  cursor: "pointer",
+  width: "30%",
+};
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUserName] = useState("");
@@ -68,19 +85,44 @@ const App = () => {
     });
   };
 
-  const LikeButton = (blog) => {
-    let newObj = blog;
-    newObj.likes += 1;
-    blogService.likeBlog(newObj.id, newObj);
-    refreshBlogs();
+  const LikeButton = ({ blog }) => {
+    const handleClick = (blog) => {
+      let newObj = blog;
+      newObj.likes += 1;
+      blogService.likeBlog(newObj.id, newObj);
+      refreshBlogs();
+    };
+    return (
+      <button style={buttonStyle} onClick={() => handleClick(blog)}>
+        like
+      </button>
+    );
   };
 
-  const DeleteButton = (blog) => {
-    let confirm = window.confirm(`Remove blog ${blog.title} by ${blog.author}`);
-    if (confirm) {
-      blogService.deleteBlog(blog.id);
-      refreshBlogs();
-    }
+  const DeleteButton = ({ blog }) => {
+    let removeStyle = {
+      cursor: buttonStyle.cursor,
+      width: buttonStyle.width,
+      backgroundColor: "rgb(17, 134, 212)",
+      borderRadius: "5px",
+      border: "none",
+      color: "white",
+      padding: "5px",
+    };
+    const handleClick = (blog) => {
+      let confirm = window.confirm(
+        `Remove blog ${blog.title} by ${blog.author}`
+      );
+      if (confirm) {
+        blogService.deleteBlog(blog.id);
+        refreshBlogs();
+      }
+    };
+    return (
+      <button style={removeStyle} onClick={() => handleClick(blog)}>
+        remove
+      </button>
+    );
   };
 
   if (user === null) {
@@ -108,15 +150,24 @@ const App = () => {
         <Togglable buttonLabel="new blog">
           <BlogForm createBlog={addBlog} setMessage={setMessage} />
         </Togglable>
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            LikeButton={LikeButton}
-            name={user.name}
-            DeleteButton={DeleteButton}
-          />
-        ))}
+        {blogs.map((blog) => {
+          return (
+            <div style={blogStyle} key={blog.id}>
+              <Blog blog={blog} />
+              <Togglable buttonLabel="view">
+                {blog.url} <br />
+                {blog.likes}
+                <LikeButton blog={blog} />
+                <br />
+                {user.name}
+                <br />
+                <DeleteButton blog={blog} />
+                <br />
+                <br />
+              </Togglable>
+            </div>
+          );
+        })}
       </div>
     );
   }
