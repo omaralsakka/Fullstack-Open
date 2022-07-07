@@ -16,7 +16,10 @@ const App = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      blogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(blogs);
+    });
   }, []);
 
   useEffect(() => {
@@ -62,7 +65,10 @@ const App = () => {
     let newObj = blog;
     newObj.likes += 1;
     blogService.likeBlog(newObj.id, newObj);
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      blogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(blogs);
+    });
   };
 
   if (user === null) {
@@ -91,7 +97,12 @@ const App = () => {
           <BlogForm createBlog={addBlog} setMessage={setMessage} />
         </Togglable>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} LikeButton={LikeButton} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            LikeButton={LikeButton}
+            name={user.name}
+          />
         ))}
       </div>
     );
