@@ -131,7 +131,7 @@ const App = () => {
         <h2>Blogs</h2>
         {message && <Message message={message} setMessage={setMessage} />}
         <h2>Log in to application</h2>
-        <Togglable buttonLabel="Log in">
+        <Togglable buttonLabel="login">
           <LoginForm
             handleLogin={handleLogin}
             username={username}
