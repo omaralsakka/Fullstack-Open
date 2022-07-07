@@ -93,7 +93,11 @@ const App = () => {
       refreshBlogs();
     };
     return (
-      <button style={buttonStyle} onClick={() => handleClick(blog)}>
+      <button
+        className="like-button"
+        style={buttonStyle}
+        onClick={() => handleClick(blog)}
+      >
         like
       </button>
     );
@@ -131,7 +135,7 @@ const App = () => {
         <h2>Blogs</h2>
         {message && <Message message={message} setMessage={setMessage} />}
         <h2>Log in to application</h2>
-        <Togglable buttonLabel="login">
+        <Togglable buttonLabel="login" buttonHideLabel="cancel">
           <LoginForm
             handleLogin={handleLogin}
             username={username}
@@ -148,14 +152,14 @@ const App = () => {
         <h2>Blogs</h2>
         {message && <Message message={message} setMessage={setMessage} />}
         <LoggedUser user={user} setUser={setUser} setMessage={setMessage} />
-        <Togglable buttonLabel="new blog">
+        <Togglable buttonLabel="new blog" buttonHideLabel="cancel">
           <BlogForm createBlog={addBlog} setMessage={setMessage} />
         </Togglable>
         {blogs.map((blog) => {
           return (
             <div style={blogStyle} key={blog.id}>
               <Blog blog={blog} />
-              <Togglable buttonLabel="view">
+              <Togglable buttonLabel="view" buttonHideLabel="hide">
                 {blog.url} <br />
                 {blog.likes}
                 <LikeButton className="likeButton" blog={blog} />

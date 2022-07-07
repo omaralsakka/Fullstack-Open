@@ -22,7 +22,7 @@ const Togglable = (props) => {
       </div>
       <div style={show} className="togglableContent">
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <button onClick={toggleVisibility}>{props.buttonHideLabel}</button>
         <br />
         <br />
       </div>

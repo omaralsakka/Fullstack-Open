@@ -44,15 +44,15 @@ describe("Blog app", function () {
     });
 
     it("A blog can be created", function () {
-      cy.get("#title").type("a test note by cyprees");
+      cy.get("#title").type("a test blog by cyprees");
       cy.get("#author").type("CypressTest");
       cy.get("#url").type("cyprees.com");
       cy.contains("create").click();
-      cy.contains("a test note by cyprees CypressTest");
+      cy.contains("a test blog by cyprees CypressTest");
     });
 
     it("like button works", function () {
-      cy.get("#title").type("a test note by cyprees");
+      cy.get("#title").type("a test blog by cyprees");
       cy.get("#author").type("CypressTest");
       cy.get("#url").type("cyprees.com");
       cy.contains("create").click();
@@ -62,13 +62,30 @@ describe("Blog app", function () {
     });
 
     it("user can delete a blog", function () {
-      cy.get("#title").type("a test note by cyprees");
+      cy.get("#title").type("a test blog by cyprees");
       cy.get("#author").type("CypressTest");
       cy.get("#url").type("cyprees.com");
       cy.contains("create").click();
       cy.contains("view").click();
       cy.contains("remove").click();
-      cy.get("a test note by cyprees CypressTest").should("not.exist");
+      cy.get("a test blog by cyprees CypressTest").should("not.exist");
+    });
+
+    it("blogs are sorted with likes", function () {
+      cy.get("#title").type("at the bottom");
+      cy.get("#author").type("CypressTest");
+      cy.get("#url").type("cyprees.com");
+      cy.contains("create").click();
+      cy.contains("view").click();
+      cy.get("#title").type("at the top");
+      cy.get("#author").type("CypressTest");
+      cy.get("#url").type("cyprees.com");
+      cy.contains("create").click();
+      cy.contains("at the top CypressTest");
+      cy.contains("at the top CypressTest").parent().contains("view").click();
+      cy.contains("at the top CypressTest").parent().contains("like").click();
+      cy.get(".blog").eq(0).should("contain", "at the top");
+      cy.get(".blog").eq(1).should("contain", "at the bottom");
     });
   });
 });
