@@ -58,6 +58,13 @@ const App = () => {
     });
   };
 
+  const LikeButton = (blog) => {
+    let newObj = blog;
+    newObj.likes += 1;
+    blogService.likeBlog(newObj.id, newObj);
+    blogService.getAll().then((blogs) => setBlogs(blogs));
+  };
+
   if (user === null) {
     return (
       <div>
@@ -84,7 +91,7 @@ const App = () => {
           <BlogForm createBlog={addBlog} setMessage={setMessage} />
         </Togglable>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} LikeButton={LikeButton} />
         ))}
       </div>
     );
