@@ -34,4 +34,21 @@ describe("Blog app", function () {
       cy.contains("Wrong credentials");
     });
   });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.contains("login").click();
+      cy.get("#username").type("oabdelfa");
+      cy.get("#password").type("123456");
+      cy.get("#login-button").click();
+    });
+
+    it("A blog can be created", function () {
+      cy.get("#title").type("a test note by cyprees");
+      cy.get("#author").type("CypressTest");
+      cy.get("#url").type("cyprees.com");
+      cy.contains("create").click();
+      cy.contains("a test note by cyprees CypressTest");
+    });
+  });
 });
