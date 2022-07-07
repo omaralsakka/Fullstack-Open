@@ -128,6 +128,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <h2>Blogs</h2>
         {message && <Message message={message} setMessage={setMessage} />}
         <h2>Log in to application</h2>
         <Togglable buttonLabel="Log in">
@@ -144,7 +145,7 @@ const App = () => {
   } else {
     return (
       <div>
-        <h2>blogs</h2>
+        <h2>Blogs</h2>
         {message && <Message message={message} setMessage={setMessage} />}
         <LoggedUser user={user} setUser={setUser} setMessage={setMessage} />
         <Togglable buttonLabel="new blog">
