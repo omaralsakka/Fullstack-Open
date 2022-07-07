@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const LoginForm = ({
   handleLogin,
   username,
@@ -31,4 +33,12 @@ const LoginForm = ({
     <button type="submit">login</button>
   </form>
 );
+
+LoginForm.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  setUserName: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+};
 export default LoginForm;
