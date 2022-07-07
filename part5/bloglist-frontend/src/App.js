@@ -157,7 +157,7 @@ const App = () => {
               <Togglable buttonLabel="view">
                 {blog.url} <br />
                 {blog.likes}
-                <LikeButton blog={blog} />
+                <LikeButton className="likeButton" blog={blog} />
                 <br />
                 {user.name}
                 <br />

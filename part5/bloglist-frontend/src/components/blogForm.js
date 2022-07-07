@@ -24,12 +24,13 @@ const BlogForm = ({ createBlog, setMessage }) => {
   };
 
   return (
-    <div>
+    <div className="formDiv">
       <h2>Create new</h2>
 
       <form onSubmit={addBlog}>
         title:
         <input
+          className="title"
           type="text"
           value={newTitle}
           onChange={({ target }) => {

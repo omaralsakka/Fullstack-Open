@@ -4,19 +4,40 @@ import { render, screen } from "@testing-library/react";
 import Blog from "./Blog";
 import userEvent from "@testing-library/user-event";
 import Togglable from "./Togglable";
+import BlogForm from "./blogForm";
 
-// test("renders content", () => {
-//   const blog = {
-//     title: "testing blog",
-//     author: "react test",
-//   };
+test("renders content", () => {
+  const blog = {
+    title: "testing blog",
+    author: "react test",
+  };
 
-//   render(<Blog blog={blog} />);
+  render(<Blog blog={blog} />);
 
-//   const element = screen.getByText("testing blog react test");
-//   screen.debug(element);
-//   expect(element).toBeDefined();
-// });
+  const element = screen.getByText("testing blog react test");
+  screen.debug(element);
+  expect(element).toBeDefined();
+});
+
+test("<BlogForm /> updates parent state and calls onSubmit", async () => {
+  const createBlog = jest.fn();
+  const user = userEvent.setup();
+  const setMessage = () => {
+    return;
+  };
+  let container;
+  container = render(
+    <BlogForm createBlog={createBlog} setMessage={setMessage} />
+  ).container;
+
+  const input = container.querySelector(".title");
+  const sendButton = screen.getByText("create");
+
+  await user.type(input, "testing a form...");
+  await user.click(sendButton);
+  expect(createBlog.mock.calls).toHaveLength(1);
+  expect(createBlog.mock.calls[0][0].title).toBe("testing a form...");
+});
 
 describe("<Togglable />", () => {
   let container;
