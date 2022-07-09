@@ -8,7 +8,6 @@ const anecdotesAtStart = [
   "Premature optimization is the root of all evil.",
   "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
 ];
-
 const getId = () => (100000 * Math.random()).toFixed(0);
 
 const asObject = (anecdote) => {
@@ -19,41 +18,33 @@ const asObject = (anecdote) => {
   };
 };
 
-export const Vote = (id) => {
-  return {
-    type: "VOTE",
-    data: { id },
-  };
-};
-
-export const createAnecdote = (data) => {
-  return {
-    type: "CREATE",
-    newAnecdote: {
-      content: data,
-      id: getId(),
-      votes: 0,
-    },
-  };
-};
-
 const initialState = anecdotesAtStart.map(asObject);
 
-const anecdoteReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "CREATE":
-      return [...state, action.newAnecdote];
-    case "VOTE":
-      const id = action.data.id;
+const anecdoteSlice = createSlice({
+  name: "anecdotes",
+  initialState,
+  reducers: {
+    createAnecdote(state, action) {
+      const content = action.payload;
+      state.push({
+        content,
+        id: getId(),
+        votes: 0,
+      });
+    },
+    Vote(state, action) {
+      const id = action.payload;
       const anecdoteToChange = state.find((anc) => anc.id === id);
       const anecdoteUpdated = {
         ...anecdoteToChange,
         votes: anecdoteToChange.votes + 1,
       };
-      return state.map((anc) => (anc.id !== id ? anc : anecdoteUpdated));
-    default:
-      return state;
-  }
-};
+      return state
+        .map((anc) => (anc.id !== id ? anc : anecdoteUpdated))
+        .sort((a, b) => b.votes - a.votes);
+    },
+  },
+});
 
-export default anecdoteReducer;
+export const { createAnecdote, Vote, newNotification } = anecdoteSlice.actions;
+export default anecdoteSlice.reducer;
