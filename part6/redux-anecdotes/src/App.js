@@ -2,17 +2,15 @@ import { useEffect } from "react";
 import AnecdoteForm from "./components/AnecdoteForm";
 import AnecdotesList from "./components/AnecdoteList.";
 import Notification from "./components/Notification";
-import anecdoteService from "./services/anecdotes";
-import { setAnecdotes } from "./reducers/anecdoteReducer";
+
 import { useDispatch } from "react-redux";
+import { initializeAnecdotes } from "./reducers/anecdoteReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    anecdoteService
-      .getAll()
-      .then((anecdotes) => dispatch(setAnecdotes(anecdotes)));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    dispatch(initializeAnecdotes());
+  }, [dispatch]);
 
   return (
     <div>
