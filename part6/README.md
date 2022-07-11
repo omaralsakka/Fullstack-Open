@@ -1,6 +1,7 @@
 ## :page_with_curl: **Part Description:**
 
-This part was mainly focused on learning how to use Redux to handle state management within a react-application.
+This part was mainly focused on learning how to use Redux to handle state management within a react-application.<br>
+Additionally, Json server was used as the server for the projects.
 
 ## :bulb: **The idea behind the project**
 
