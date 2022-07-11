@@ -14,7 +14,7 @@ export const { Notification } = notificationSlice.actions;
 
 export const setNotification = (content, time) => {
   return async (dispatch) => {
-    await dispatch(Notification(content));
+    await dispatch(Notification(`you voted for ${content}`));
     setTimeout(() => {
       dispatch(Notification(""));
     }, time * 1000);
