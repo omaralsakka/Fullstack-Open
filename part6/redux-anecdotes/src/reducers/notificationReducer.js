@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+let timer;
+
 const notificationSlice = createSlice({
   name: "notifications",
   initialState: "",
@@ -14,8 +16,9 @@ export const { Notification } = notificationSlice.actions;
 
 export const setNotification = (content, time) => {
   return async (dispatch) => {
-    await dispatch(Notification(`you voted for ${content}`));
-    setTimeout(() => {
+    clearTimeout(timer);
+    dispatch(Notification(`you voted for ${content}`));
+    timer = setTimeout(() => {
       dispatch(Notification(""));
     }, time * 1000);
   };
