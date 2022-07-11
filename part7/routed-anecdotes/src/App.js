@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
+import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom";
 
 const Menu = () => {
   const padding = {
@@ -76,7 +70,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [info, setInfo] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
@@ -85,6 +79,7 @@ const CreateNew = (props) => {
       info,
       votes: 0,
     });
+    navigate("/");
   };
 
   return (
@@ -127,9 +122,7 @@ const Home = ({ anecdotes }) => (
   </div>
 );
 
-const Anecdote = ({ anecdotes }) => {
-  const id = useParams().id;
-  const anecdote = anecdotes.find((n) => n.id === Number(id));
+const Anecdote = ({ anecdote }) => {
   return (
     <div>
       <h2>{anecdote.content}</h2>
@@ -145,7 +138,24 @@ const Anecdote = ({ anecdotes }) => {
     </div>
   );
 };
-
+const Notification = ({ notification, setNotification }) => {
+  const style = {
+    border: "5px solid red",
+    padding: "5px",
+    width: "100%",
+  };
+  const width = { width: "30%" };
+  if (notification) {
+    setTimeout(() => {
+      setNotification("");
+    }, 5000);
+    return (
+      <div style={width}>
+        <p style={style}>a new {notification} created!</p>
+      </div>
+    );
+  }
+};
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -169,6 +179,7 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000);
     setAnecdotes(anecdotes.concat(anecdote));
+    setNotification(anecdote.content);
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
@@ -184,23 +195,40 @@ const App = () => {
     setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)));
   };
 
+  const match = useMatch("/anecdotes/:id");
+
+  const anecdote = match
+    ? anecdotes.find((anc) => anc.id === Number(match.params.id))
+    : null;
+
   return (
-    <Router>
-      <div>
-        <h1>Software anecdotes</h1>
-        <Menu />
-        <Routes>
-          <Route
-            path="/anecdotes/:id"
-            element={<Anecdote anecdotes={anecdotes} />}
-          />
-          <Route path="/create" element={<CreateNew addNew={addNew} />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/" element={<Home anecdotes={anecdotes} />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <div>
+      <h1>Software anecdotes</h1>
+      <Menu />
+      <Routes>
+        <Route
+          path="/anecdotes/:id"
+          element={<Anecdote anecdote={anecdote} />}
+        />
+        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/"
+          element={
+            <div>
+              {notification ? (
+                <Notification
+                  notification={notification}
+                  setNotification={setNotification}
+                />
+              ) : null}
+              <Home anecdotes={anecdotes} />
+            </div>
+          }
+        />
+      </Routes>
+      <Footer />
+    </div>
   );
 };
 
