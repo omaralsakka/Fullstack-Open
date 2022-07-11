@@ -81,6 +81,12 @@ const CreateNew = (props) => {
     });
     navigate("/");
   };
+  const handleReset = (e) => {
+    e.preventDefault();
+    content.onChange(e);
+    author.onChange(e);
+    info.onChange(e);
+  };
 
   return (
     <div>
@@ -98,7 +104,10 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
+        <button type="reset" value="" onClick={(e) => handleReset(e)}>
+          reset
+        </button>
       </form>
     </div>
   );
