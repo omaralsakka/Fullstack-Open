@@ -1,0 +1,11 @@
+# to get all
+GET http://localhost:3003/api/blogs/ 
+
+# to get a single valid id
+###
+
+GET http://localhost:3003/api/blogs/62bf005c0cece191f96393ee
+
+# to get wrong id
+###
+GET http://localhost:3003/api/blogs/wrong

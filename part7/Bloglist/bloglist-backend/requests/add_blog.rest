@@ -1,0 +1,34 @@
+POST http://localhost:3003/api/blogs/ 
+content-type: application/json
+
+{
+  "title": "google with id",
+  "author": "Google",
+  "url": "google.com",
+  "likes": 8,
+  "userId": "62c2e3fd60eeaae59e79ae01"
+}
+
+###
+
+POST http://localhost:3003/api/blogs/ 
+content-type: application/json
+
+{
+  "title": "Wiki Blog",
+  "author": "Wikipedia",
+  "url": "wikipedia.com",
+  "likes": 5
+}
+
+###
+
+POST http://localhost:3003/api/blogs/ 
+content-type: application/json
+
+{
+  "title": "Elden Ring",
+  "author": "Elden lord",
+  "url": "eldenring.com",
+  "likes": 100
+}
