@@ -1,10 +1,15 @@
-import LoginForm from "./components/login";
+import store from "./store";
+import { useDispatch } from "react-redux";
+import { logUser } from "./reducers/loginReducer";
+
 const App = () => {
-  return (
-    <div className="container">
-      <LoginForm />
-    </div>
-  );
+  const dispatch = useDispatch();
+  console.log("initialState:", store.getState());
+  dispatch(logUser("elee", "123456"));
+  store.subscribe(() => {
+    console.log("updatedState:", store.getState());
+  });
+  return <div className="App"></div>;
 };
 
 export default App;
