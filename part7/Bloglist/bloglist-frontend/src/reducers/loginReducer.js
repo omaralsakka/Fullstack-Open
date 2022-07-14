@@ -27,7 +27,7 @@ const loginReducer = (state = initialState, action) => {
   }
 };
 
-const loginSuccess = (user) => {
+export const loginSuccess = (user) => {
   return {
     type: LOGIN_SUCCESS,
     payload: user,
@@ -41,24 +41,17 @@ const loginFailed = (error) => {
   };
 };
 
-// export const logUser = (username, password) => {
-//   return function (dispatch) {
-//     login({ username, password })
-//       .then((response) => {
-//         setToken(response.token);
-//         dispatch(loginSuccess(response));
-//       })
-//       .catch((error) => {
-//         dispatch(loginFailed(error.message));
-//       });
-//   };
-// };
-
 export const logUser = (username, password) => {
   return async (dispatch) => {
     try {
       const response = await login({ username, password });
+      setToken(response.token);
       dispatch(loginSuccess(response));
+
+      window.localStorage.setItem(
+        "loggedBlogappUser",
+        JSON.stringify(response)
+      );
     } catch (error) {
       dispatch(loginFailed(error.message));
     }
