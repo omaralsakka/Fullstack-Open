@@ -11,6 +11,12 @@ import { logUser } from "./reducers/loginReducer";
 import { logoutUser } from "./reducers/loginReducer";
 import Users from "./components/Users";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+const BlogPreview = () => {
+  const id = useParams().id;
+  return <div>This is single blog preview {id} </div>;
+};
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,7 +71,8 @@ const App = () => {
                   <NavBar name={loggedUser.name} handleLogOut={handleLogOut} />
                 }
               >
-                <Route element={<Home />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/blogs/:id" element={<BlogPreview />} />
                 <Route path="users" element={<Users />} />
               </Route>
             </Routes>

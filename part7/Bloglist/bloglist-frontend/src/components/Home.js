@@ -2,19 +2,33 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../reducers/blogsReducer";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Outlet } from "react-router-dom";
 import { userBlogs } from "../services/blogServices";
-
-const BlogPreview = ({ blog }) => {
-  return <div>This is single blog preview {blog.title}</div>;
-};
 
 const Blog = ({ blog }) => {
   const blogLink = `/${blog.id}`;
   return (
-    <div>
+    <Link to={blogLink}>
       {blog.title} by {blog.author} <br />
-    </div>
+    </Link>
+  );
+};
+
+const Blogs = ({ blogs }) => {
+  return (
+    <>
+      {blogs.map((blog) => {
+        return (
+          <div key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>
+              {blog.title} by {blog.author}
+            </Link>
+            <br />
+          </div>
+        );
+      })}
+      <Outlet />
+    </>
   );
 };
 
@@ -31,26 +45,12 @@ const Home = () => {
       setBlogs(userBlogs);
     });
   }, []);
+
   return (
     <div>
       <h1>{user.name}</h1>
       <br />
-      <div>
-        {blogs.map((blog) => {
-          return <Blog key={blog.id + 1} blog={blog} />;
-        })}
-      </div>
-      {/* <Routes>
-        {blogs.map((blog) => {
-          return (
-            <Route
-              key={blog.id + 2}
-              path={`/${blog.id}`}
-              element={<BlogPreview blog={blog} />}
-            />
-          );
-        })}
-      </Routes> */}
+      <Blogs blogs={blogs} />
     </div>
   );
 };
