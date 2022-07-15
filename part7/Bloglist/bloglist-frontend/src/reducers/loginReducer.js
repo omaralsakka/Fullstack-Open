@@ -1,4 +1,5 @@
-import { LOGIN_SUCCESS, LOGIN_ERROR } from "../actions/types";
+import { resolvePath } from "react-router-dom";
+import { LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS } from "../actions/types";
 import { login, setToken } from "../services/loginServices";
 
 const initialState = {
@@ -22,6 +23,12 @@ const loginReducer = (state = initialState, action) => {
         user: null,
         error: payload,
       };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        user: null,
+        error: "",
+      };
     default:
       return state;
   }
@@ -41,17 +48,36 @@ const loginFailed = (error) => {
   };
 };
 
+export const logoutSuccess = () => {
+  return {
+    type: LOGOUT_SUCCESS,
+    payload: "",
+  };
+};
+
+export const logoutUser = () => {
+  return async (dispatch) => {
+    try {
+      window.localStorage.clear();
+      dispatch(logoutSuccess);
+      return;
+    } catch (error) {
+      return error;
+    }
+  };
+};
+
 export const logUser = (username, password) => {
   return async (dispatch) => {
     try {
       const response = await login({ username, password });
       setToken(response.token);
       dispatch(loginSuccess(response));
-
       window.localStorage.setItem(
         "loggedBlogappUser",
         JSON.stringify(response)
       );
+      return response;
     } catch (error) {
       dispatch(loginFailed(error.message));
     }

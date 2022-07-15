@@ -1,18 +1,6 @@
 import { Form, Button } from "react-bootstrap";
-import useField from "./useField";
-import { useDispatch } from "react-redux";
-import { logUser } from "../reducers/loginReducer";
 
-const LoginForm = () => {
-  const username = useField("text");
-  const password = useField("password");
-  const dispatch = useDispatch();
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    dispatch(logUser(username.value, password.value));
-  };
-
+const LoginForm = ({ username, password, handleLogin }) => {
   return (
     <Form onSubmit={handleLogin}>
       <Form.Group className="mb-3">

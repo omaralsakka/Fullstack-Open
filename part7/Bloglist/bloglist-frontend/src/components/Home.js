@@ -11,7 +11,7 @@ const Blog = ({ blog }) => {
   );
 };
 
-const Profile = () => {
+const Home = () => {
   const user = useSelector((state) => state.login.user);
   const [blogs, setBlogs] = useState([]);
 
@@ -20,14 +20,13 @@ const Profile = () => {
       setBlogs(response);
     });
   }, []);
-  //   console.log(blogs);
   return (
     <div>
       <h1>{user.name}</h1>
       <br />
       {blogs.map((blog) => {
         return (
-          <div>
+          <div key={blog.id}>
             <Blog blog={blog} /> <br />
           </div>
         );
@@ -36,4 +35,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Home;
