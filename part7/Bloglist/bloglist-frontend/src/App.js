@@ -1,4 +1,4 @@
-import store from "./store";
+// import store from "./store";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import LoginForm from "./components/loginForm";
@@ -9,7 +9,8 @@ import NavBar from "./components/NavBar";
 import useField from "./components/useField";
 import { logUser } from "./reducers/loginReducer";
 import { logoutUser } from "./reducers/loginReducer";
-import { useNavigate } from "react-router-dom";
+import Users from "./components/Users";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -48,16 +49,27 @@ const App = () => {
     }
   };
 
-  const unsubscribe = store.subscribe(() => {
-    console.log("updatedState:", store.getState());
-  });
+  // const unsubscribe = store.subscribe(() => {
+  //   console.log("updatedState:", store.getState());
+  // });
 
   return (
     <div className="container">
       {loggedUser ? (
         <div>
-          <NavBar name={loggedUser.name} handleLogOut={handleLogOut} />
-          <Home />
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <NavBar name={loggedUser.name} handleLogOut={handleLogOut} />
+                }
+              >
+                <Route element={<Home />} />
+                <Route path="users" element={<Users />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
         </div>
       ) : (
         <LoginForm

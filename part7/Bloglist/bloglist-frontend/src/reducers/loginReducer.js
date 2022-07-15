@@ -1,4 +1,3 @@
-import { resolvePath } from "react-router-dom";
 import { LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS } from "../actions/types";
 import { login, setToken } from "../services/loginServices";
 
