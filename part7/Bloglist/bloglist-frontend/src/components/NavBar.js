@@ -31,6 +31,9 @@ const NavBar = ({ name, handleLogOut }) => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+      <div>
+        <h1>blog app</h1>
+      </div>
       <Outlet />
     </>
   );

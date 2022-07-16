@@ -1,6 +1,5 @@
 import { BLOGS_FETCH_SUCCESS, BLOGS_FETCH_ERROR } from "../actions/types";
 import { getBlogs } from "../services/blogServices";
-import { loginSuccess } from "./loginReducer";
 
 const initialState = {
   blogs: [],
@@ -45,7 +44,7 @@ export const fetchBlogs = () => {
   return async (dispatch) => {
     try {
       const response = await getBlogs();
-      dispatch(blogFetchSuccess(response.data));
+      dispatch(blogFetchSuccess(response));
       return response;
     } catch (error) {
       dispatch(blogFetchError(error.message));

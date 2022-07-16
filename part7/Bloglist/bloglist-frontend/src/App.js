@@ -11,12 +11,7 @@ import { logUser } from "./reducers/loginReducer";
 import { logoutUser } from "./reducers/loginReducer";
 import Users from "./components/Users";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useParams } from "react-router-dom";
-
-const BlogPreview = () => {
-  const id = useParams().id;
-  return <div>This is single blog preview {id} </div>;
-};
+import BlogPreview from "./components/BlogPreview";
 
 const App = () => {
   const dispatch = useDispatch();
