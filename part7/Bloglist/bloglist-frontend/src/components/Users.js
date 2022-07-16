@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import { Table } from "react-bootstrap";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchUsers } from "../reducers/usersReducer";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const Users = () => {
   // for fetching users
   useEffect(() => {
     dispatch(fetchUsers());
-  }, []);
+  }, [dispatch]);
   const users = useSelector((state) => state.users.users);
   console.log(users);
 

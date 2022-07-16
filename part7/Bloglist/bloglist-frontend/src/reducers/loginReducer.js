@@ -1,5 +1,6 @@
 import { LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS } from "../actions/types";
-import { login, setToken } from "../services/userServices";
+import { login } from "../services/userServices";
+import { setToken } from "../services/blogServices";
 
 const initialState = {
   user: null,

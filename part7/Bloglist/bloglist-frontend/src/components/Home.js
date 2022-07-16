@@ -1,16 +1,21 @@
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../reducers/blogsReducer";
 import { Link } from "react-router-dom";
-import { userBlogs } from "../services/blogServices";
+import BlogForm from "./blogForm";
 
 const Blogs = ({ blogs }) => {
+  const blogStyle = {
+    border: "inset 2px black",
+    padding: "10px",
+    margin: "5px",
+  };
+
   return (
     <>
       {blogs.map((blog) => {
         return (
-          <div key={blog.id}>
+          <div style={blogStyle} key={blog.id}>
             <Link to={`/blogs/${blog.id}`}>
               {blog.title} by {blog.author}
             </Link>
@@ -23,7 +28,6 @@ const Blogs = ({ blogs }) => {
 };
 
 const Home = () => {
-  const user = useSelector((state) => state.login.user);
   const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
 
@@ -34,10 +38,11 @@ const Home = () => {
       });
       setBlogs(userBlogs);
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
+      <BlogForm blogs={blogs} setBlogs={setBlogs} />
       <Blogs blogs={blogs} />
     </div>
   );

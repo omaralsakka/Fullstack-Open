@@ -1,22 +1,23 @@
 // import store from "./store";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginForm from "./components/loginForm";
-import { loginSuccess } from "./reducers/loginReducer";
-import { setToken } from "./services/userServices";
 import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import useField from "./components/useField";
-import { logUser } from "./reducers/loginReducer";
-import { logoutUser } from "./reducers/loginReducer";
 import Users from "./components/Users";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BlogPreview from "./components/BlogPreview";
 import UserPreview from "./components/UserPreview";
+import { setToken } from "./services/blogServices";
+import { loginSuccess } from "./reducers/loginReducer";
+import { logUser, logoutUser } from "./reducers/loginReducer";
+import { fetchBlogs } from "./reducers/blogsReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   const [loggedUser, setLoggedUser] = useState("");
+  const [blogs, setBlogs] = useState("");
   const username = useField("text");
   const password = useField("password");
 
@@ -29,7 +30,7 @@ const App = () => {
       setLoggedUser(user);
       setToken(user.token);
     }
-  }, []);
+  }, [dispatch]);
 
   const handleLogin = (e) => {
     e.preventDefault();
