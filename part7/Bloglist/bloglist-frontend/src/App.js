@@ -12,12 +12,10 @@ import UserPreview from "./components/UserPreview";
 import { setToken } from "./services/blogServices";
 import { loginSuccess } from "./reducers/loginReducer";
 import { logUser, logoutUser } from "./reducers/loginReducer";
-import { fetchBlogs } from "./reducers/blogsReducer";
 
 const App = () => {
   const dispatch = useDispatch();
   const [loggedUser, setLoggedUser] = useState("");
-  const [blogs, setBlogs] = useState("");
   const username = useField("text");
   const password = useField("password");
 

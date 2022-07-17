@@ -87,4 +87,18 @@ blogsRouter.put("/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
+blogsRouter.put("/:id/comments/", (request, response, next) => {
+  const body = request.body;
+
+  const newUpdate = {
+    comments: body.comments,
+  };
+
+  Blog.findByIdAndUpdate(request.params.id, newUpdate, { new: true })
+    .then((updatedNote) => {
+      response.json(updatedNote);
+    })
+    .catch((error) => next(error));
+});
+
 module.exports = blogsRouter;

@@ -1,16 +1,19 @@
 import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { addLike } from "../reducers/blogsReducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { getBlog } from "../services/blogServices";
+import Comments from "./commentsForm";
 
 const BlogPreview = () => {
   const paramId = useParams().id;
   const dispatch = useDispatch();
   const [blog, setBlog] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const blogOwner = useSelector((state) => state.users.users).find((user) => {
+    return user.id === blog.user;
+  });
   useEffect(() => {
     getBlog(paramId).then((response) => {
       setBlog(response);
@@ -18,12 +21,13 @@ const BlogPreview = () => {
     });
   }, [paramId]);
 
-  const handleLike = (id, blog) => {
+  const handleLike = () => {
     let newObj = Object.assign({}, blog);
     newObj.likes += 1;
-    dispatch(addLike(id, newObj));
+    dispatch(addLike(blog.id, newObj));
     setBlog(newObj);
   };
+
   if (isLoading) {
     return <div></div>;
   } else {
@@ -36,19 +40,13 @@ const BlogPreview = () => {
           </a>
           <br />
           {blog.likes} likes
-          <Button onClick={() => handleLike(blog.id, blog)} className="mx-2">
+          <Button onClick={() => handleLike()} className="mx-2">
             like
           </Button>
-          <p>added by {blog.user.name}</p>
+          <p>added by {blogOwner.name}</p>
         </div>
 
-        <div className="my-5 p-2 border  ">
-          <h3>comments</h3>
-          <ul>
-            <li>comment 1</li>
-            <li>comment 2</li>
-          </ul>
-        </div>
+        <Comments blog={blog} setBlog={setBlog} />
       </div>
     );
   }

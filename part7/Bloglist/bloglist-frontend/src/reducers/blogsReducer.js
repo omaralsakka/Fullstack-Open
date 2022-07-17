@@ -5,8 +5,15 @@ import {
   ADD_BLOG_ERROR,
   LIKE_BLOG_SUCCESS,
   LIKE_BLOG_ERROR,
+  ADD_COMMENT_SUCCESS,
+  ADD_COMMENT_ERROR,
 } from "../actions/types";
-import { getBlogs, addBlog, likeBlogService } from "../services/blogServices";
+import {
+  getBlogs,
+  addBlog,
+  likeBlogService,
+  addBlogComment,
+} from "../services/blogServices";
 
 const initialState = {
   blogs: [],
@@ -52,6 +59,17 @@ const blogsReducer = (state = initialState, action) => {
         error: "",
       };
     case LIKE_BLOG_ERROR:
+      return {
+        ...state,
+        error: payload,
+      };
+    case ADD_COMMENT_SUCCESS:
+      return {
+        ...state,
+        state: payload,
+        error: "",
+      };
+    case ADD_COMMENT_ERROR:
       return {
         ...state,
         error: payload,
@@ -103,6 +121,20 @@ const likeBlogError = (response) => {
   };
 };
 
+const addCommentSuccess = (response) => {
+  return {
+    type: ADD_COMMENT_SUCCESS,
+    payload: response,
+  };
+};
+
+const addCommentError = (response) => {
+  return {
+    type: ADD_COMMENT_ERROR,
+    payload: response,
+  };
+};
+
 export const fetchBlogs = () => {
   return async (dispatch) => {
     try {
@@ -131,10 +163,20 @@ export const addLike = (id, newObj) => {
   return async (dispatch) => {
     try {
       const response = await likeBlogService(id, newObj);
-      // console.log("this is response in reducer:", response);
       dispatch(likeBlogSuccess(response));
     } catch (error) {
       dispatch(likeBlogError(error.message));
+    }
+  };
+};
+
+export const addComment = (id, newObj) => {
+  return async (dispatch) => {
+    try {
+      const response = await addBlogComment(id, newObj);
+      dispatch(addCommentSuccess(response));
+    } catch (error) {
+      dispatch(addCommentError(error.message));
     }
   };
 };

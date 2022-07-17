@@ -32,3 +32,8 @@ export const likeBlogService = async (id, newObj) => {
   const response = await axios.put(`${baseUrl}/${id}`, newObj);
   return response.data;
 };
+
+export const addBlogComment = async (id, newObj) => {
+  const response = await axios.put(`${baseUrl}/${id}/comments`, newObj);
+  return response.data;
+};

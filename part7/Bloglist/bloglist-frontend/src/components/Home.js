@@ -4,7 +4,7 @@ import { fetchBlogs } from "../reducers/blogsReducer";
 import { Link } from "react-router-dom";
 import BlogForm from "./blogForm";
 
-const Blogs = ({ blogs }) => {
+export const Blogs = ({ blogs }) => {
   const blogStyle = {
     border: "inset 2px black",
     padding: "10px",
