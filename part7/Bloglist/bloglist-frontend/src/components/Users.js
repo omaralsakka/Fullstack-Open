@@ -13,7 +13,6 @@ const Users = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
   const users = useSelector((state) => state.users.users);
-  console.log(users);
 
   return (
     <div>

@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ListGroup } from "react-bootstrap";
 import { Blogs } from "./Home";
 
 const UserPreview = () => {
@@ -15,11 +14,6 @@ const UserPreview = () => {
       <br />
       <h3>added blogs</h3>
       <Blogs blogs={user.blogs} />
-      {/* <ListGroup>
-        {user.blogs.map((blog) => {
-          return <ListGroup.Item key={blog.title}>{blog.title}</ListGroup.Item>;
-        })}
-      </ListGroup> */}
     </div>
   );
 };

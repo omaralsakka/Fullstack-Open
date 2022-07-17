@@ -51,10 +51,6 @@ const App = () => {
     }
   };
 
-  // const unsubscribe = store.subscribe(() => {
-  //   console.log("updatedState:", store.getState());
-  // });
-
   return (
     <div className="container">
       {loggedUser ? (
